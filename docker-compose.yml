@@ -10,28 +10,25 @@ services:
             dockerfile: Dockerfile
         ports:
             - '${HTTP_PORT:-80}:80'
-            - '${HTTPS_PORT:-443}:443'
         volumes:
-            - ./docker/logs/nginx:/var/log/nginx
+            - ./logs:/var/log/nginx
             - ./src:/var/www
         links:
             - php
         depends_on:
             - php
-        restart: always
         networks:
             - localnet
 
     # PHP
     php:
-        container_name: "${APP_NAME}-php-${PHP_VERSION:-8.0}"
-        build: ./docker/php${PHP_VERSION:-8.0}
+        container_name: "${APP_NAME}-php"
+        build: ./docker/php
         links:
             - mysql
         volumes:
             - ./src:/var/www
-            - ./docker/logs/php:/var/log/php
-        restart: always
+            - ./logs:/var/log/php
         networks:
             - localnet
 
@@ -42,15 +39,14 @@ services:
         ports:
             - "${DB_PORT}:3306"
         volumes:
-            - ./docker/logs/mysql:/var/log/mysql
-            - ./docker/mysql/db:/var/lib/mysql
+            - ./logs:/var/log/mysql
+            - ./db:/var/lib/mysql
         environment:
             MYSQL_DATABASE: "${DB_DATABASE}"
             MYSQL_USER: "${DB_USER}"
             MYSQL_PASSWORD: "${DB_PASSWORD}"
             MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
         command: mysqld --sql-mode=""
-        restart: always
         networks:
             - localnet
 
@@ -61,7 +57,7 @@ services:
         links:
             - mysql
         ports:
-            - '${MYADMIN_PORT:-8082}:80'
+            - '${PMA_PORT:-8082}:80'
         environment:
             MYSQL_USERNAME: "${DB_USER}"
             MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"

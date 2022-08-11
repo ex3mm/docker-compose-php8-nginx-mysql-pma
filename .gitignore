@@ -1,7 +1,7 @@
 .idea
 TODO
 FIX
-docker/logs/mysql/*
-docker/logs/nginx/*
-docker/logs/php/*
-docker/mysql/db/*
+logs/*
+!logs/.gitignore
+db/*
+!db/.gitignore

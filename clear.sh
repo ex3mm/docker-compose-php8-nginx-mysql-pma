@@ -1,14 +1,10 @@
 #!/bin/bash
 
 # Очистка логов
-rm -rf docker/logs/mysql/*
-rm -rf docker/logs/nginx/*
-rm -rf docker/logs/php/*
+rm -rf logs/*
 
 # Очистка DB
-rm -rf docker/mysql/db/*
+rm -rf db/*
 
 # Очистка SRC
 rm -rf src/*
-echo "<?php" > src/index.php
-echo "echo phpinfo();" >> src/index.php
